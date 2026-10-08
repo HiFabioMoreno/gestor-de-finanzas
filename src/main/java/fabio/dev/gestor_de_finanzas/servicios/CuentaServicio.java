@@ -35,13 +35,14 @@ public class CuentaServicio {
         Cuenta cuenta = new Cuenta();
         cuenta.setTituloCuenta( cuentaCrearReqDto.tituloCuenta());
         cuenta.setDescripcionCuenta(cuentaCrearReqDto.descripcionCuenta());
-        cuenta.setTotal(0.00);
+        cuenta.setTotal(cuentaCrearReqDto.total());
 
         cuentaRepositorio.save(cuenta);
 
         logger.info("Cuenta creada correctamente");
 
         return new CuentaResDto(
+                cuenta.getId(),
                 cuenta.getTituloCuenta(),
                 cuenta.getDescripcionCuenta(),
                 cuenta.getTotal(),
@@ -57,6 +58,7 @@ public class CuentaServicio {
 
         cuentas.forEach(cuenta -> listaCuentas.add(
                 new CuentaResDto(
+                cuenta.getId(),
                 cuenta.getTituloCuenta(),
                 cuenta.getDescripcionCuenta(),
                 cuenta.getTotal(),

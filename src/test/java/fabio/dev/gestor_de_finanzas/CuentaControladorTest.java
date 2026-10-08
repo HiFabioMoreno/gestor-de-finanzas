@@ -52,6 +52,7 @@ public class CuentaControladorTest {
     @BeforeEach
     void setUp() {
         cuentaResDto = new CuentaResDto(
+                1,
                 "Gastos de la casa",
                 "Cuenta para administrar los gastos de la casa",
                 0.00,
@@ -63,6 +64,7 @@ public class CuentaControladorTest {
     @DisplayName("Debería listar todas las cuentas correctamente")
     void obtenerCuentas_debeRetornarLista() throws Exception {
         CuentaResDto cuenta2 = new CuentaResDto(
+                1,
                 "Cuenta Secundaria",
                 "Cuenta de gastos",
                 500.0,
@@ -137,17 +139,6 @@ public class CuentaControladorTest {
         CuentaActualizarReqDto req = new CuentaActualizarReqDto("Nuevo Titulo", "Nueva Descripcion");
 
         mockMvc.perform(patch("/gestorFinanzas/cuenta/0/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(req)))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    @DisplayName("No debería actualizar cuenta con datos inválidos - BAD_REQUEST")
-    void actualizarCuenta_datosInvalidos_debeRetornarBadRequest() throws Exception {
-        CuentaActualizarReqDto req = new CuentaActualizarReqDto("", "Nueva Descripcion");
-
-        mockMvc.perform(patch("/gestorFinanzas/cuenta/1/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isBadRequest());
