@@ -33,14 +33,11 @@ public class Gasto {
     @Positive(message = "La cantidad del gasto debe de ser mayor a cero")
     private Double cantidad;
 
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "gasto_categoria",
-            joinColumns = @JoinColumn(name = "gasto_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "categoria_id", referencedColumnName = "id")
-    )
-    private List<Categoria> categorias = new ArrayList<>();
+    @ElementCollection
+    @CollectionTable(name = "gasto_categoria", joinColumns = @JoinColumn(name = "gasto_id", referencedColumnName = "id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "categoria")
+    private List<Enum<CategoriasPredefinidas>> categorias = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cuenta_id", referencedColumnName = "id")
@@ -54,14 +51,14 @@ public class Gasto {
         this.fechaGasto = Utilitis.GenerarFecha();
     }
 
-    public void agregarCategoria(Categoria categoria) {
+    public void agregarCategoriaPre(Enum<CategoriasPredefinidas> categoria) {
         categorias.add(categoria);
-        categoria.getGastos().add(this);
+        //categoria.getGastos().add(this);
     }
 
-    public void removerCategoria(Categoria categoria) {
+    public void removerCategoriaPre(Enum<CategoriasPredefinidas> categoria) {
         categorias.remove(categoria);
-        categoria.getGastos().remove(this);
+        //categoria.getGastos().remove(this);
     }
 
 }

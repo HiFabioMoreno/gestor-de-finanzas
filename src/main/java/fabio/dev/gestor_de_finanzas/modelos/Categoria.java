@@ -23,17 +23,17 @@ public class Categoria {
     @Column(unique = true, nullable = false, length = 200)
     private String nombreCategoria;
 
-    @ManyToMany(mappedBy = "categorias", fetch = FetchType.LAZY)
+    @Transient
     private List<Gasto> gastos = new ArrayList<>();
 
     public void agregarGasto(Gasto gasto) {
         gastos.add(gasto);
-        gasto.getCategorias().add(this);
+        //gasto.getCategorias().add(this);
     }
 
     public void removerGasto(Gasto gasto) {
         gastos.remove(gasto);
-        gasto.getCategorias().remove(this);
+        //gasto.getCategorias().remove(this);
     }
 
 }
