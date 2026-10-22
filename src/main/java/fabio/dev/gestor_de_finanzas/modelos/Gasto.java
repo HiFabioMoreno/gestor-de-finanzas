@@ -37,7 +37,7 @@ public class Gasto {
     @CollectionTable(name = "gasto_categoria", joinColumns = @JoinColumn(name = "gasto_id", referencedColumnName = "id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "categoria")
-    private List<Enum<CategoriasPredefinidas>> categorias = new ArrayList<>();
+    private List<CategoriasPredefinidas> categorias = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cuenta_id", referencedColumnName = "id")
@@ -51,12 +51,12 @@ public class Gasto {
         this.fechaGasto = Utilitis.GenerarFecha();
     }
 
-    public void agregarCategoriaPre(Enum<CategoriasPredefinidas> categoria) {
+    public void agregarCategoriaPre(CategoriasPredefinidas categoria) {
         categorias.add(categoria);
         //categoria.getGastos().add(this);
     }
 
-    public void removerCategoriaPre(Enum<CategoriasPredefinidas> categoria) {
+    public void removerCategoriaPre(CategoriasPredefinidas categoria) {
         categorias.remove(categoria);
         //categoria.getGastos().remove(this);
     }
