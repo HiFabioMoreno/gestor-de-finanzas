@@ -20,6 +20,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -53,7 +54,7 @@ public class GastoControladorTest {
                 "Tenis Nike",
                 "Compra de tenis para el gym",
                 Arrays.asList(CategoriasPredefinidas.OCIO),
-                2100.00,
+                new BigDecimal("2100.00"),
                 LocalDate.now()
         );
     }
@@ -67,7 +68,7 @@ public class GastoControladorTest {
                 "Medicamento Ibuprofeno",
                 null,
                 List.of(CategoriasPredefinidas.SALUD),
-                120.00,
+                new BigDecimal("120.00"),
                 LocalDate.now()
         );
 
@@ -115,7 +116,7 @@ public class GastoControladorTest {
                 "",
                 "",
                 null,
-                -10.0);
+                new BigDecimal("-10.0"));
 
         mockMvc.perform(post("/gestorFinanzas/gastos/")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -132,11 +133,11 @@ public class GastoControladorTest {
                 "Compra de tenis asics",
                 null,
                 null,
-                2600.00);
+                new BigDecimal("2600.00"));
 
         GastoResDto res = new GastoResDto(1,
                 "Compra de tenis asics",
-                gastoResDto.descripcionGasto(), gastoResDto.categorias(), 2600.00, gastoResDto.fechaGasto());
+                gastoResDto.descripcionGasto(), gastoResDto.categorias(), new BigDecimal("2600.00"), gastoResDto.fechaGasto());
 
         when(gastoServicio.actualizarGasto(1, req)).thenReturn(res);
 
@@ -164,7 +165,7 @@ public class GastoControladorTest {
                 "",
                 "",
                 null,
-                1000.0);
+                new BigDecimal("1000.0"));
 
         mockMvc.perform(patch("/gestorFinanzas/gastos/gasto/"+ idInvalido +"/")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -182,7 +183,7 @@ public class GastoControladorTest {
                 "",
                 "",
                 null,
-                1000.0);
+                new BigDecimal("1000.0"));
 
         doThrow(new RecursoNoEncontradoException("No existe gasto con id:" + idInvalido))
                 .when(gastoServicio).actualizarGasto(eq(idInvalido), any(GastoActualizarReqDto.class));
