@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -37,13 +37,11 @@ public class GastoServicioTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
-
         requestDto = new GastoCrearReqDto(
                 "Compra supermercado",
                 "Compra semanal de víveres",
                 List.of(CategoriasPredefinidas.COMIDA),
-                150.75
+                new BigDecimal("150.75")
         );
 
     }
@@ -67,7 +65,7 @@ public class GastoServicioTest {
         assertThat(resultado.tituloGasto()).isEqualTo(requestDto.tituloGasto());
         assertThat(resultado.descripcionGasto()).isEqualTo(requestDto.descripcionGasto());
         assertThat(resultado.categorias()).isEqualTo(requestDto.categorias());
-        assertThat(resultado.cantidad()).isEqualTo(requestDto.cantidad());
+        assertThat(resultado.cantidad()).isEqualByComparingTo(requestDto.cantidad());
         assertThat(resultado.fechaGasto()).isEqualTo(fechaEsperada);
 
         ArgumentCaptor<Gasto> gastoCaptor = ArgumentCaptor.forClass(Gasto.class);
@@ -77,7 +75,7 @@ public class GastoServicioTest {
         assertThat(gastoCapturado.getTituloGasto()).isEqualTo(requestDto.tituloGasto());
         assertThat(gastoCapturado.getDescripcionGasto()).isEqualTo(requestDto.descripcionGasto());
         assertThat(gastoCapturado.getCategorias()).isEqualTo(requestDto.categorias());
-        assertThat(gastoCapturado.getCantidad()).isEqualTo(requestDto.cantidad());
+        assertThat(gastoCapturado.getCantidad()).isEqualByComparingTo(requestDto.cantidad());
 
         verifyNoMoreInteractions(gastoRepositorio);
     }
@@ -145,13 +143,13 @@ public class GastoServicioTest {
         gasto1.setId(1);
         gasto1.setTituloGasto("Pago de emergencia");
         gasto1.setCategorias(List.of(CategoriasPredefinidas.EMERGENCIA,CategoriasPredefinidas.SALUD));
-        gasto1.setCantidad(2200.00);
+        gasto1.setCantidad(new BigDecimal("2200.00"));
 
         GastoActualizarReqDto actulizarDto = new GastoActualizarReqDto(
                 null,
                 null,
                 null,
-                1200.00);
+                new BigDecimal("1200.00"));
 
         when(gastoRepositorio.findById(anyInt())).thenReturn(Optional.of(gasto1));
 
@@ -159,7 +157,7 @@ public class GastoServicioTest {
         assertThat(resultado).isNotNull();
         assertThat(resultado.tituloGasto()).isEqualTo("Pago de emergencia");
         assertThat(resultado.categorias()).isEqualTo(List.of(CategoriasPredefinidas.EMERGENCIA,CategoriasPredefinidas.SALUD));
-        assertThat(resultado.cantidad()).isEqualTo(1200.00);
+        assertThat(resultado.cantidad()).isEqualByComparingTo(new BigDecimal("1200.00"));
 
         verify(gastoRepositorio, times(1)).findById(anyInt());
 
@@ -173,13 +171,13 @@ public class GastoServicioTest {
         gasto1.setId(1);
         gasto1.setTituloGasto("Pago de emergencia");
         gasto1.setCategorias(List.of(CategoriasPredefinidas.EMERGENCIA,CategoriasPredefinidas.SALUD));
-        gasto1.setCantidad(2200.00);
+        gasto1.setCantidad(new BigDecimal("2200.00"));
 
         GastoActualizarReqDto actulizarDto = new GastoActualizarReqDto(
                 "Pago de hospital",
                 null,
                 null,
-                1200.00);
+                new BigDecimal("1200.00"));
 
         when(gastoRepositorio.findById(anyInt())).thenReturn(Optional.of(gasto1));
 
@@ -187,7 +185,7 @@ public class GastoServicioTest {
         assertThat(resultado).isNotNull();
         assertThat(resultado.tituloGasto()).isEqualTo("Pago de hospital");
         assertThat(resultado.categorias()).isEqualTo(List.of(CategoriasPredefinidas.EMERGENCIA,CategoriasPredefinidas.SALUD));
-        assertThat(resultado.cantidad()).isEqualTo(1200.00);
+        assertThat(resultado.cantidad()).isEqualByComparingTo(new BigDecimal("1200.00"));
 
         verify(gastoRepositorio, times(1)).findById(anyInt());
 
@@ -201,7 +199,7 @@ public class GastoServicioTest {
         gasto1.setId(1);
         gasto1.setTituloGasto("Pago de emergencia");
         gasto1.setCategorias(List.of(CategoriasPredefinidas.EMERGENCIA,CategoriasPredefinidas.SALUD));
-        gasto1.setCantidad(2200.00);
+        gasto1.setCantidad(new BigDecimal("2200.00"));
 
         GastoActualizarReqDto req = new GastoActualizarReqDto(null, null, null, null);
 
@@ -210,7 +208,7 @@ public class GastoServicioTest {
         GastoResDto resultado = gastoServicio.actualizarGasto(1, req);
 
         assertThat(resultado.tituloGasto()).isEqualTo("Pago de emergencia");
-        assertThat(resultado.cantidad()).isEqualTo(2200.00);
+        assertThat(resultado.cantidad()).isEqualByComparingTo(new BigDecimal("2200.00"));
 
         verify(gastoRepositorio, times(1)).findById(1);
 
@@ -220,7 +218,7 @@ public class GastoServicioTest {
     @DisplayName("Debe lanzar excepcion cuando el gasto no existe")
     void actualizarCuenta_idInexistente_lanzaExcepcion() {
 
-        GastoActualizarReqDto req = new GastoActualizarReqDto(null,null,null, 100.00);
+        GastoActualizarReqDto req = new GastoActualizarReqDto(null,null,null, new BigDecimal("100.00"));
 
         when(gastoRepositorio.findById(99)).thenReturn(Optional.empty());
 

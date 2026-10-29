@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public class Gasto {
 
     @NotNull(message = "La cantidad del gasto es necesaria, por lo cual no puede estar vacío")
     @Positive(message = "La cantidad del gasto debe de ser mayor a cero")
-    private Double cantidad;
+    private BigDecimal cantidad;
 
     @ElementCollection
     @CollectionTable(name = "gasto_categoria", joinColumns = @JoinColumn(name = "gasto_id", referencedColumnName = "id"))

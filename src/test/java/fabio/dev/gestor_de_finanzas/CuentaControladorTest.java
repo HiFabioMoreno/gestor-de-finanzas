@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class CuentaControladorTest {
                 1,
                 "Gastos de la casa",
                 "Cuenta para administrar los gastos de la casa",
-                0.00,
+                BigDecimal.ZERO,
                 LocalDate.now()
         );
     }
@@ -67,7 +68,7 @@ public class CuentaControladorTest {
                 1,
                 "Cuenta Secundaria",
                 "Cuenta de gastos",
-                500.0,
+                new BigDecimal("500.0"),
                 LocalDate.of(2026, 2, 1)
         );
         when(cuentaServicio.listarCuentas()).thenReturn(List.of(cuentaResDto, cuenta2));
@@ -95,7 +96,7 @@ public class CuentaControladorTest {
         CuentaCrearReqDto req = new CuentaCrearReqDto(
                 "Gastos de la casa",
                 "Cuenta para administrar los gastos de la casa",
-                0.00
+                BigDecimal.ZERO
         );
         when(cuentaServicio.crearCuenta(any(CuentaCrearReqDto.class))).thenReturn(cuentaResDto);
 
@@ -110,7 +111,7 @@ public class CuentaControladorTest {
     @Test
     @DisplayName("No debería crear cuenta con datos inválidos - BAD_REQUEST")
     void crearCuenta_datosInvalidos_debeRetornarBadRequest() throws Exception {
-        CuentaCrearReqDto req = new CuentaCrearReqDto("", "", -10.0);
+        CuentaCrearReqDto req = new CuentaCrearReqDto("", "", new BigDecimal("-10.0"));
 
         mockMvc.perform(post("/gestorFinanzas/cuenta/")
                         .contentType(MediaType.APPLICATION_JSON)
