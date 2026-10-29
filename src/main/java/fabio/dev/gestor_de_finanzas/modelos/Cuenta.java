@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class Cuenta {
 
     @NotNull(message = "El total de la cuenta es necesario, por lo cual no debe estar vacío")
     @Positive(message = "El total de la cuenta debe ser mayor a cero")
-    private Double total;
+    private BigDecimal total;
 
     @NotNull(message = "La fecha de la creacion de la cuenta no debe estar vacia")
     private LocalDate fechaCuentaCreada;

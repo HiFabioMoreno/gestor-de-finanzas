@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +44,7 @@ public class CuentaServicioTest {
         cuenta.setId(1);
         cuenta.setTituloCuenta("Gastos de la casa");
         cuenta.setDescripcionCuenta("Cuenta para administrar los gastos de la casa");
-        cuenta.setTotal(0.00);
+        cuenta.setTotal(BigDecimal.ZERO);
 
     }
 
@@ -60,13 +61,13 @@ public class CuentaServicioTest {
         CuentaCrearReqDto dto = new CuentaCrearReqDto(
                 "Gastos de la casa",
                 "Cuenta para administrar los gastos de la casa",
-                0.00);
+                BigDecimal.ZERO);
 
         CuentaResDto cuentaPrueba = cuentaServicio.crearCuenta(dto);
 
         assertEquals("Gastos de la casa", cuentaPrueba.tituloCuenta());
         assertNotNull( cuentaPrueba.fechaCuentaCreada());
-        assertEquals(0.00, cuentaPrueba.total());
+        assertThat(cuentaPrueba.total()).isEqualByComparingTo(BigDecimal.ZERO);
 
         verify(this.cuentaRepositorio, times(1)).save(any(Cuenta.class));
 
@@ -80,7 +81,7 @@ public class CuentaServicioTest {
         cuenta2.setId(2);
         cuenta2.setTituloCuenta("Cuenta Secundaria");
         cuenta2.setDescripcionCuenta("Cuenta de gastos");
-        cuenta2.setTotal(500.0);
+        cuenta2.setTotal(new BigDecimal("500.0"));
         cuenta2.setFechaCuentaCreada(LocalDate.of(2026, 2, 1));
 
         when(cuentaRepositorio.findAll()).thenReturn(List.of(cuenta, cuenta2));
@@ -89,7 +90,7 @@ public class CuentaServicioTest {
 
         assertThat(resultado.get(1).tituloCuenta()).isEqualTo("Cuenta Secundaria");
         assertThat(resultado.get(1).descripcionCuenta()).isEqualTo("Cuenta de gastos");
-        assertThat(resultado.get(1).total()).isEqualTo(500.0);
+        assertThat(resultado.get(1).total()).isEqualByComparingTo(new BigDecimal("500.0"));
         assertThat(resultado.get(1).fechaCuentaCreada()).isEqualTo(LocalDate.of(2026, 2, 1));
 
         assertThat(resultado.get(0).tituloCuenta()).isEqualTo("Gastos de la casa");
