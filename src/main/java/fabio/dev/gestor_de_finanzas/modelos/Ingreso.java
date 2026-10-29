@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -33,7 +34,7 @@ public class Ingreso {
 
     @NotNull(message = "La cantidad del ingreso es necesario, por lo cual no puede estar vacío")
     @Positive(message = "La cantidad del ingreso debe ser mayor a cero")
-    private Double cantidadIngreso;
+    private BigDecimal cantidadIngreso;
 
     @NotNull(message = "La fecha no puede estar vacío")
     private LocalDate fechaIngreso;
